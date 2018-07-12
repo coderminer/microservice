@@ -1,0 +1,34 @@
+[
+    {
+        "id": "chris_rivers",
+        "name": "Chris Rivers"
+    },
+    {
+        "id": "peter_curley",
+        "name": "Peter Curley"
+    },
+    {
+        "id": "garret_heaton",
+        "name": "Garret Heaton"
+    },
+    {
+        "id": "michael_scott",
+        "name": "Michael Scott"
+    },
+    {
+        "id": "jim_halpert",
+        "name": "Jim Halpert"
+    },
+    {
+        "id": "pam_beesly",
+        "name": "Pam Beesly"
+    },
+    {
+        "id": "dwight_schrute",
+        "name": "Dwight Schrute"
+    },
+    {
+        "id": "kevin_woo",
+        "name": "Kevin woo"
+    }
+]
