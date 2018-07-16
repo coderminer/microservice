@@ -2,8 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/coderminer/microservice/messaging"
 
 	"github.com/coderminer/microservice/dao"
 	"github.com/coderminer/microservice/helper"
@@ -16,6 +19,17 @@ const (
 	db         = "User"
 	collection = "UserModel"
 )
+
+var client messaging.IMessageClient
+
+func init() {
+	client = &messaging.MessageClient{}
+	err := client.ConnectToBroker("amqp://guest:guest@localhost:5672/")
+	if err != nil {
+		fmt.Println("connect to rabbitmq error", err)
+	}
+
+}
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
@@ -91,4 +105,27 @@ func UserBooking(w http.ResponseWriter, r *http.Request) {
 		helper.ResponseWithJson(w, http.StatusBadRequest, "invalid request")
 	}
 
+}
+
+func NewBooking(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	user_name := params["name"]
+	defer r.Body.Close()
+
+	var bookings models.Booking
+	body, _ := ioutil.ReadAll(r.Body)
+	err := json.Unmarshal(body, &bookings)
+	if err != nil {
+		fmt.Println("the format body error ", err)
+	}
+	fmt.Println("user name:", user_name, bookings)
+	go notifyMsg(body)
+
+}
+
+func notifyMsg(body []byte) {
+	err := client.PublishToQueue(body, "new_booking")
+	if err != nil {
+		fmt.Println("Failed to publis message", err)
+	}
 }

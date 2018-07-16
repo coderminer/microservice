@@ -20,6 +20,7 @@ func init() {
 	register("POST", "/user", controllers.CreateUser, nil)
 	register("GET", "/user", controllers.AllUsers, nil)
 	register("GET", "/user/{name}/booking", controllers.UserBooking, nil)
+	register("POST", "/user/{name}/booking", controllers.NewBooking, nil)
 }
 
 func register(method, pattern string, handler http.HandlerFunc, middleware mux.MiddlewareFunc) {
